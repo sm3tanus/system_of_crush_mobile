@@ -49,9 +49,6 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Yandex Map Example'),
-        ),
         body: YandexMap(
           onMapCreated: (mapWindow) {
             setState(() {

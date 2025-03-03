@@ -77,7 +77,8 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                           "Добро пожаловать,",
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Unbounded',
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
                           ),
                         ),
@@ -87,8 +88,9 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                             "${userFio ?? 'Загрузка...'}",
                             style: TextStyle(
                               fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: Color.fromARGB(255, 80, 139, 151),
+                              fontFamily: 'Unbounded',
+                            fontWeight: FontWeight.w500,                              
+                            color: Color.fromARGB(255, 80, 139, 151),
                             ),
                             maxLines: 1,
                             minFontSize: 16,
@@ -159,8 +161,8 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                                         Text(
                                           '№${snapshot.data![index].id.toString()}',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 24,
+                                          fontFamily: 'Unbounded',
+                                          fontWeight: FontWeight.w700,                                                fontSize: 24,
                                             color: Color(0xff2E2E2E),
                                           ),
                                         ),

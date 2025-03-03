@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ThemeData themeData = ThemeData(
-  fontFamily: 'Open Sans',
+  fontFamily: 'Raleway',
   
 );
 
