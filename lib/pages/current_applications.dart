@@ -120,7 +120,14 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
                   ),
+                  gradient: LinearGradient(
+            colors: [Colors.white, Color(0xFFD9D9D9),],
+            stops: [0.2, 0.2,], // Четкое разделение
+            begin: Alignment.topLeft,
+            end: Alignment.bottomCenter,
+          ),
                 ),
+                
                 child: FutureBuilder<List<Application>>(
                   future: applications,
                   builder: (context, snapshot) {
