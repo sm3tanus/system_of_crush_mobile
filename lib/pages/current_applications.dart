@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/API/models.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -78,7 +79,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Unbounded',
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -89,7 +90,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'Unbounded',
-                            fontWeight: FontWeight.w500,                              
+                            fontWeight: FontWeight.w600,                              
                             color: Color.fromARGB(255, 80, 139, 151),
                             ),
                             maxLines: 1,
@@ -102,7 +103,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                     IconButton(
                       onPressed: () {},
                       icon: Icon(
-                        Icons.view_headline,
+                        Iconsax.frame2,
                         size: MediaQuery.of(context).size.height * 0.03,
                         color: Color(0xFFD9D9D9),
                       ),
@@ -130,161 +131,129 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(child: Text("Нет данных"));
                     } else {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: EdgeInsets.all(16),
-                            margin: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(255, 146, 146, 146),
-                                  offset: Offset(0, 4),
-                                  blurRadius: 6,
-                                  spreadRadius: 0,
-                                )
-                              ],
+                      return  ListView.builder(
+            itemCount: snapshot.data!.length,
+  padding: EdgeInsets.symmetric(horizontal: 16, vertical: MediaQuery.of(context).size.height * 0.04,),
+            itemBuilder: (context, index) {
+              var application = snapshot.data![index];
+
+              Color importanceColor = application.importance == "Высокая"
+                  ? Colors.redAccent
+                  : application.importance == "Средняя"
+                      ? Colors.orangeAccent
+                      : Colors.grey;
+
+              return Container(
+                padding: EdgeInsets.all(16),
+                margin: EdgeInsets.only(bottom: 15,),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 4),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '№${application.id}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Unbounded',
+                            fontSize: 20,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Icon(Icons.timer, size: 16, color: Colors.grey),
+                            SizedBox(width: 5),
+                            Text(
+                              'Таймер мин.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.redAccent,
+                              ),
                             ),
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          '№${snapshot.data![index].id.toString()}',
-                                          style: TextStyle(
-                                          fontFamily: 'Unbounded',
-                                          fontWeight: FontWeight.w700,                                                fontSize: 24,
-                                            color: Color(0xff2E2E2E),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                            left: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.2,
-                                          ),
-                                          child: Text("Таймер??"),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      '№ заявки',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 15,
-                                        color: Color(0xff2E2E2E),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.6,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            (snapshot.data![index].address
-                                                .toString()),
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xff2E2E2E),
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.007,
-                                          ),
-                                          Text(
-                                            snapshot.data![index].accident
-                                                .toString(),
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.007,
-                                          ),
-                                          Text(
-                                            '${snapshot.data![index].importance.toString()} важность',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: snapshot.data![index]
-                                                          .importance
-                                                          .toString() ==
-                                                      "Высокая"
-                                                  ? const Color.fromARGB(
-                                                      255,
-                                                      177,
-                                                      32,
-                                                      21) 
-                                                  : snapshot.data![index]
-                                                              .importance
-                                                              .toString() ==
-                                                          "Средняя"
-                                                      ? const Color.fromARGB(255, 149, 113, 7)
-                                                      : const Color(0xff2E2E2E),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.03,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  margin: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                    color: snapshot.data![index]
-                                                          .importance
-                                                          .toString() ==
-                                                      "Высокая"
-                                                  ? const Color.fromARGB(
-                                                      255,
-                                                      177,
-                                                      32,
-                                                      21) 
-                                                  : snapshot.data![index]
-                                                              .importance
-                                                              .toString() ==
-                                                          "Средняя"
-                                                      ? const Color.fromARGB(255, 149, 113, 7)
-                                                      : const Color(0xff2E2E2E),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    
+                    Row(
+                      children: [
+                        Icon(Iconsax.location, size: 18, color: Colors.grey),
+                        SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            application.address,
+                            style: TextStyle(fontSize: 16),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+
+                    Row(
+                      children: [
+                        Icon(Iconsax.warning_2, size: 18, color: Colors.grey),
+                        SizedBox(width: 6),
+                        Text(
+                          application.accident,
+                          style: TextStyle(fontSize: 16, color: Colors.black87),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+
+                    Row(
+                      children: [
+                        Icon(Icons.flag, size: 18, color: importanceColor),
+                        SizedBox(width: 6),
+                        Text(
+                          '${application.importance} важность',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: importanceColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 59, 187, 125),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        "В процессе",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
                       );
+
                     }
                   },
                 ),

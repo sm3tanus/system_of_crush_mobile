@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/API/models.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -77,7 +78,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Unbounded',
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -88,7 +89,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                             style: TextStyle(
                               fontSize: 22,
                               fontFamily: 'Unbounded',
-                            fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                               color: Color.fromARGB(255, 80, 139, 151),
                             ),
                             maxLines: 1,
@@ -101,8 +102,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                     IconButton(
                       onPressed: () {},
                       icon: Icon(
-                        Icons.view_headline,
-                        size: MediaQuery.of(context).size.height * 0.03,
+                        Iconsax.frame2,
                         color: Color(0xFFD9D9D9),
                       ),
                     ),
@@ -130,127 +130,79 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                       return Center(child: Text("Нет данных"));
                     } else {
                       return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: EdgeInsets.all(16),
-                            margin: EdgeInsets.only(
-                              left:  MediaQuery.of(context).size.width * 0.03,
-                              right: MediaQuery.of(context).size.width * 0.03,
-                              top: MediaQuery.of(context).size.height * 0.02
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(255, 146, 146, 146),
-                                  offset: Offset(0, 4),
-                                  blurRadius: 6,
-                                  spreadRadius: 0,
-                                ),
-                              ],
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '№${snapshot.data![index].id.toString()}',
-                                  style: TextStyle(
-                                    fontFamily: 'Unbounded',
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 24,
-                                    color: Color(0xff2E2E2E),
-                                  ),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.6,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            (snapshot.data![index].address
-                                                .toString()),
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w800,
-                                              color: Color.fromARGB(
-                                                255,
-                                                80,
-                                                139,
-                                                151,
-                                              ),
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          SizedBox(
-                                            height:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.height *
-                                                0.007,
-                                          ),
-                                          Text(
-                                            snapshot.data![index].accident
-                                                .toString(),
-                                            style: TextStyle(fontSize: 12),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.03,
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                          0.11,
-                                      margin: EdgeInsets.only(left: 10),
-                                      decoration: BoxDecoration(
-                                        color:
-                                            snapshot.data![index].importance
-                                                        .toString() ==
-                                                    "Высокая"
-                                                ? const Color.fromARGB(
-                                                  255,
-                                                  177,
-                                                  32,
-                                                  21,
-                                                )
-                                                : snapshot
-                                                        .data![index]
-                                                        .importance
-                                                        .toString() ==
-                                                    "Средняя"
-                                                ? const Color.fromARGB(
-                                                  255,
-                                                  149,
-                                                  113,
-                                                  7,
-                                                )
-                                                : const Color(0xff2E2E2E),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+  itemCount: snapshot.data!.length,
+  padding: EdgeInsets.symmetric(horizontal: 16, vertical: MediaQuery.of(context).size.height * 0.04,),
+
+  itemBuilder: (context, index) {
+    var application = snapshot.data![index];
+    
+    Color importanceColor = application.importance == "Высокая"
+        ? Colors.redAccent
+        : application.importance == "Средняя"
+            ? Colors.orangeAccent
+            : Colors.grey;
+
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      elevation: 4, 
+      margin: EdgeInsets.only(bottom: 15),
+      child: ListTile(
+        contentPadding: EdgeInsets.all(16),
+        leading: CircleAvatar(
+          // ignore: deprecated_member_use
+          backgroundColor: importanceColor.withOpacity(0.2),
+          child: Icon(Iconsax.warning_2, color: importanceColor), 
+        ),
+        title: Text(
+          '№${application.id.toString()}',
+          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Unbounded' ,fontSize: 18),
+        ),
+        
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Iconsax.location, size: 16, color: Colors.grey),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    application.address,
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.003),
+            Row(
+              children: [
+                Icon(Iconsax.warning_2, size: 16, color: Colors.grey),
+                SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    application.accident,
+                    style: TextStyle(fontSize: 13, color: Colors.black54),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        trailing: Icon(Iconsax.arrow_right_34, size: 16, color: Colors.grey), 
+        onTap: () {
+        },
+      ),
+    );
+  },
+);
+
                     }
                   },
                 ),

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
 import '../API/auth_api/api.dart';
 
@@ -39,7 +40,8 @@ class _AuthPageState extends State<AuthPage> {
                           "Добро\nпожаловать\nв систему",
                           style: TextStyle(
                             fontSize: 34,
-                            fontWeight: FontWeight.w800,
+                            fontFamily: 'Unbounded',
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
@@ -47,7 +49,8 @@ class _AuthPageState extends State<AuthPage> {
                           "UrbanFix",
                           style: TextStyle(
                             fontSize: 45,
-                            fontWeight: FontWeight.w800,
+                            fontFamily: 'Unbounded',
+                            fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 80, 139, 151),
                           ),
                         ),
@@ -135,8 +138,8 @@ class _AuthPageState extends State<AuthPage> {
                                       EdgeInsets.symmetric(horizontal: 16.0),
                                   suffixIcon: IconButton(
                                     icon: !visibility
-                                        ? Icon(Icons.visibility)
-                                        : Icon(Icons.visibility_off),
+                                        ? Icon(Iconsax.eye)
+                                        : Icon(Iconsax.eye_slash),
                                     onPressed: () {
                                       setState(() {
                                         visibility = !visibility;

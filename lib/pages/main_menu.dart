@@ -20,8 +20,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     ApplicationsPage(),
     CurrentApplicationsPage(),
-    MapPage() 
-     ];
+    MapPage(),
+  ];
 
   void _onTabSelected(int index) {
     setState(() {
@@ -32,10 +32,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTabSelected,
+      body: Stack(
+        children: [
+          _screens[_selectedIndex],
+          FloatingNavBar(currentIndex: _selectedIndex, onTap: _onTabSelected),
+        ],
       ),
     );
   }

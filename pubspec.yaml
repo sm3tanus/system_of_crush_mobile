@@ -39,6 +39,7 @@ dependencies:
   auto_size_text: ^3.0.0
   provider: ^6.1.2
   yandex_maps_mapkit: ^4.2.2
+  iconsax: ^0.0.8
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +89,8 @@ flutter:
           weight: 400
         - asset: fonts/Unbounded-Medium.ttf
           weight: 500
+        - asset: fonts/Unbounded-SemiBold.ttf
+          weight: 600
     - family: Raleway
       fonts:
         - asset: fonts/Raleway-Light.ttf
