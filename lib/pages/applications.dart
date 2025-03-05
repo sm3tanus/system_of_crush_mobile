@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/API/models.dart';
+import 'package:system_of_crush_mobile_app/pages/info_about_application.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -16,6 +17,7 @@ class ApplicationsPage extends StatefulWidget {
 
 class _ApplicationsPageState extends State<ApplicationsPage> {
   var userFio;
+  var application;
   var userRole;
   final TextEditingController _searchController = TextEditingController();
 
@@ -103,7 +105,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                     IconButton(
                       onPressed: () {},
                       icon: Icon(
-                        Iconsax.frame2,
+                        Iconsax.profile_circle,
+                        size: 30,
                         color: Color(0xFFD9D9D9),
                       ),
                     ),
@@ -119,125 +122,170 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40),
                   ),
-                   gradient: LinearGradient(
-            colors: [Colors.white, Color(0xFFD9D9D9),],
-            stops: [0.2, 0.2,], // Четкое разделение
-            begin: Alignment.topLeft,
-            end: Alignment.bottomCenter,
-          ),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.white,
+                      Color(0xFFD9D9D9),
+                    ],
+                    stops: [
+                      0.2,
+                      0.2,
+                    ], // Четкое разделение
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                color: Color(0xFFD9D9D9)
-                              ),
-                              child: TextField(
-                                maxLength: 20,
-                                controller: _searchController,
-                                cursorColor: Color(0xff353535),
-                                style: TextStyle(
-                                  color: Color(0xff353535),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 16.0),
-                                    border: InputBorder.none,
-                                    counterText: ''),
-                              ),
-                            ),    
-                    SizedBox(height: 20,), 
-                    Expanded(
-                     child: FutureBuilder<List<Application>>(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Color(0xFFD9D9D9),
+                      ),
+                      child: TextField(
+                        maxLength: 30,
+                        controller: _searchController,
+                        cursorColor: Color(0xff353535),
+                        style: TextStyle(
+                          color: Color(0xff353535),
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                            hintText: 'Поиск',
+                            hintStyle: TextStyle(
+                                color: Color.fromARGB(255, 111, 111, 111)),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 16.0),
+                            border: InputBorder.none,
+                            suffixIcon: Icon(
+                              Iconsax.search_normal_1,
+                            ),
+                            suffixIconColor: Color.fromARGB(255, 111, 111, 111),
+                            counterText: ''),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.61,
+                      child: FutureBuilder<List<Application>>(
                         future: applications,
                         builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
                             return Center(child: Text("Подождите..."));
                           } else if (snapshot.hasError) {
-                            return Center(child: Text("Ошибка: ${snapshot.error}"));
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(
+                                child: Text("Ошибка: ${snapshot.error}"));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
                             return Center(child: Text("Нет данных"));
                           } else {
                             return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        padding: EdgeInsets.symmetric(horizontal: 16,),
-                      
-                        itemBuilder: (context, index) {
-                          var application = snapshot.data![index];
-                          
-                          Color importanceColor = application.importance == "Высокая"
-                              ? Colors.redAccent
-                              : application.importance == "Средняя"
-                                  ? Colors.orangeAccent
-                                  : Colors.grey;
-                      
-                          return Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            
-                            elevation: 4, 
-                            margin: EdgeInsets.only(bottom: 15),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(16),
-                              leading: CircleAvatar(
-                                // ignore: deprecated_member_use
-                                backgroundColor: importanceColor.withOpacity(0.2),
-                                child: Icon(Iconsax.warning_2, color: importanceColor), 
+                              itemCount: snapshot.data!.length,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
                               ),
-                              title: Text(
-                                '№${application.id.toString()}',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Unbounded' ,fontSize: 18),
-                              ),
-                              
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                      Icon(Iconsax.location, size: 16, color: Colors.grey),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          application.address,
-                          style: TextStyle(fontSize: 14, color: Colors.black87),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                                    ],
+                              itemBuilder: (context, index) {
+                                application = snapshot.data![index];
+
+                                Color importanceColor =
+                                    application.importance == "Высокая"
+                                        ? Colors.redAccent
+                                        : application.importance == "Средняя"
+                                            ? Colors.orangeAccent
+                                            : Colors.grey;
+
+                                return Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                  SizedBox(height: MediaQuery.of(context).size.height * 0.003),
-                                  Row(
-                                    children: [
-                      Icon(Iconsax.warning_2, size: 16, color: Colors.grey),
-                      SizedBox(width: 5),
-                      Expanded(
-                        child: Text(
-                          application.accident,
-                          style: TextStyle(fontSize: 13, color: Colors.black54),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                                    ],
+                                  elevation: 4,
+                                  margin: EdgeInsets.only(bottom: 15),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.all(16),
+                                    leading: CircleAvatar(
+                                      // ignore: deprecated_member_use
+                                      backgroundColor:
+                                          importanceColor.withOpacity(0.2),
+                                      child: Icon(Iconsax.warning_2,
+                                          color: importanceColor),
+                                    ),
+                                    title: Text(
+                                      '№${application.id.toString()}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Unbounded',
+                                          fontSize: 18),
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Iconsax.location,
+                                                size: 16, color: Colors.grey),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                application.address,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black87),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.003),
+                                        Row(
+                                          children: [
+                                            Icon(Iconsax.warning_2,
+                                                size: 16, color: Colors.grey),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                application.accident,
+                                                style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.black54),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    trailing: Icon(Iconsax.arrow_right_34,
+                                        size: 16, color: Colors.grey),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                               InfoAboutApplicationPage(selectedApplicationId: application.id.toString(),),
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ],
-                              ),
-                              trailing: Icon(Iconsax.arrow_right_34, size: 16, color: Colors.grey), 
-                              onTap: () {
+                                );
                               },
-                            ),
-                          );
-                        },
-                      );
-                      
+                            );
                           }
                         },
                       ),

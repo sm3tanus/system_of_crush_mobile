@@ -14,7 +14,7 @@ class FloatingNavBar extends StatelessWidget {
         Positioned(
           left: 30,
           right: 30,
-          bottom: 20, 
+          bottom: 10, 
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(

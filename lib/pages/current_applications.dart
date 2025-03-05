@@ -103,8 +103,8 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                     IconButton(
                       onPressed: () {},
                       icon: Icon(
-                        Iconsax.frame2,
-                        size: MediaQuery.of(context).size.height * 0.03,
+                        Iconsax.profile_circle,
+                        size: 30,
                         color: Color(0xFFD9D9D9),
                       ),
                     ),

@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.1.2
   yandex_maps_mapkit: ^4.2.2
   iconsax: ^0.0.8
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -91,12 +92,12 @@ flutter:
           weight: 500
         - asset: fonts/Unbounded-SemiBold.ttf
           weight: 600
-    - family: Raleway
+    - family: Montserrat
       fonts:
-        - asset: fonts/Raleway-Light.ttf
-        - asset: fonts/Raleway-Regular.ttf
+        - asset: fonts/Montserrat-Light.ttf
+        - asset: fonts/Montserrat-Regular.ttf
           weight: 400
-        - asset: fonts/Raleway-Medium.ttf
+        - asset: fonts/Montserrat-Medium.ttf
           weight: 500
   #
   # For details regarding fonts from package dependencies,

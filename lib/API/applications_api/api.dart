@@ -27,6 +27,7 @@ Future fetchCurrentApplications() async {
   }
 }
 
+
 Future fetchApplications() async {
   final token = await FlutterSecureStorage().read(key: 'token');
   final url = Uri.parse('$apiURL/api/applications');
@@ -46,5 +47,27 @@ Future fetchApplications() async {
     print('ErrorMessage: ${response.body}');
     return response.statusCode;
 
+  }
+}
+
+
+Future fetchApplication(String idApplication) async {
+  final token = await FlutterSecureStorage().read(key: 'token');
+  final url = Uri.parse('$apiURL/api/applications/$idApplication');
+  var response = await http.get(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    return Application.fromJson(data);
+  } else {
+    print('Error: ${response.statusCode}');
+    print('ErrorMessage: ${response.body}');
+    return response.statusCode;
   }
 }
