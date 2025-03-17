@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
@@ -188,16 +187,6 @@ class _AuthPageState extends State<AuthPage> {
                                 });
                               }
                             },
-                            style: ButtonStyle(
-                              elevation: WidgetStateProperty.all(0),
-                              shape: WidgetStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)),
-                                ),
-                              ),
-                              padding: WidgetStateProperty.all(EdgeInsets.zero),
-                            ),
                             child: Ink(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(

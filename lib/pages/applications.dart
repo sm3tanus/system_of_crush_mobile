@@ -17,7 +17,6 @@ class ApplicationsPage extends StatefulWidget {
 
 class _ApplicationsPageState extends State<ApplicationsPage> {
   var userFio;
-  var application;
   var userRole;
   final TextEditingController _searchController = TextEditingController();
 
@@ -194,14 +193,16 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                 horizontal: 16,
                               ),
                               itemBuilder: (context, index) {
-                                application = snapshot.data![index];
+                                var currentApplication = snapshot.data![
+                                    index]; 
 
-                                Color importanceColor =
-                                    application.importance == "Высокая"
-                                        ? Colors.redAccent
-                                        : application.importance == "Средняя"
-                                            ? Colors.orangeAccent
-                                            : Colors.grey;
+                                Color importanceColor = currentApplication
+                                            .importance ==
+                                        "Высокая"
+                                    ? Colors.redAccent
+                                    : currentApplication.importance == "Средняя"
+                                        ? Colors.orangeAccent
+                                        : Colors.grey;
 
                                 return Card(
                                   color: Colors.white,
@@ -213,18 +214,19 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                   child: ListTile(
                                     contentPadding: EdgeInsets.all(16),
                                     leading: CircleAvatar(
-                                      // ignore: deprecated_member_use
                                       backgroundColor:
                                           importanceColor.withOpacity(0.2),
                                       child: Icon(Iconsax.warning_2,
                                           color: importanceColor),
                                     ),
                                     title: Text(
-                                      '№${application.id.toString()}',
+                                      '№${currentApplication.id.toString()}',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Unbounded',
-                                          fontSize: 18),
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Unbounded',
+                                        fontSize: 18,
+                                        color: Color(0xFF1B1B1B),
+                                      ),
                                     ),
                                     subtitle: Column(
                                       crossAxisAlignment:
@@ -237,7 +239,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                             SizedBox(width: 5),
                                             Expanded(
                                               child: Text(
-                                                application.address,
+                                                currentApplication.address,
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     color: Colors.black87),
@@ -259,7 +261,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                             SizedBox(width: 5),
                                             Expanded(
                                               child: Text(
-                                                application.accident,
+                                                currentApplication.accident,
                                                 style: TextStyle(
                                                     fontSize: 13,
                                                     color: Colors.black54),
@@ -278,7 +280,11 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                               InfoAboutApplicationPage(selectedApplicationId: application.id.toString(),),
+                                              InfoAboutApplicationPage(
+                                            selectedApplicationId:
+                                                currentApplication.id
+                                                    .toString(),
+                                          ),
                                         ),
                                       );
                                     },
