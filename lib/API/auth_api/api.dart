@@ -24,7 +24,6 @@ Future loginUser(String login, String password) async {
       await secureStorage.write(key: 'token', value: data);
       final token = await secureStorage.read(key: 'token');
       var user = parseJWT(token!);
-              print(user?['ID']);
 
       if (user?['role_id'] == 3) {
         await secureStorage.write(
@@ -32,7 +31,7 @@ Future loginUser(String login, String password) async {
             value:
                 '${user?['last_name']} ${user?['first_name'][0]}.${user?['patronymic'][0]}.');
         await secureStorage.write(key: 'role', value: '${user?['role_name']}');
-        await secureStorage.write(key: 'idBrigadir', value: '${user?['ID']}');
+        await secureStorage.write(key: 'idBrigadir', value: '${user?['id']}');
 
         return true;
       } else {

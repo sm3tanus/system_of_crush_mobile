@@ -7,17 +7,21 @@ import 'package:system_of_crush_mobile_app/API/models.dart';
 import 'package:system_of_crush_mobile_app/pages/placemarks_map.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InfoAboutApplicationPage extends StatefulWidget {
+class InfoAboutThisApplicationPage extends StatefulWidget {
   final String selectedApplicationId;
-  const InfoAboutApplicationPage(
-      {super.key, required this.selectedApplicationId});
+
+  const InfoAboutThisApplicationPage({
+    super.key,
+    required this.selectedApplicationId,
+  });
 
   @override
-  State<InfoAboutApplicationPage> createState() =>
-      _InfoAboutApplicationPageState();
+  State<InfoAboutThisApplicationPage> createState() =>
+      _InfoAboutThisApplicationPageState();
 }
 
-class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
+class _InfoAboutThisApplicationPageState
+    extends State<InfoAboutThisApplicationPage> {
   Future<Application?> getApplication() async {
     var result = await fetchApplication(widget.selectedApplicationId);
     print(result.toString());
@@ -31,7 +35,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
     }
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Application?>(
       future: getApplication(),
@@ -101,7 +105,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Взять в работу',
+              'Начать работу',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -120,7 +124,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
         return AlertDialog(
           backgroundColor: Colors.white,
           title: Text('Подтверждение'),
-          content: Text('Вы уверены, что хотите взять эту заявку в работу?'),
+          content: Text('Вы уверены, что хотите начать работу с этой заявкой?'),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
@@ -134,24 +138,24 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                var status =  await takeApplication(widget.selectedApplicationId);
-                if (status == 200) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Заявка успешно взята в работу!'),
-                      backgroundColor: const Color.fromARGB(255, 100, 180, 103),
-                    ),
-                  );
-                  Navigator.popAndPushNamed(context, '/menu');
-                }
-                else {
-                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Произошла ошибка. Попробуйте снова!'),
-                      backgroundColor: Colors.redAccent,
-                    ),
-                  );
-                }
+                // var status =  await takeApplication(widget.selectedApplicationId); 
+                // if (status == 200) {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text('Заявка успешно взята в работу!'),
+                //       backgroundColor: const Color.fromARGB(255, 100, 180, 103),
+                //     ),
+                //   );
+                //   Navigator.popAndPushNamed(context, '/menu');
+                // }
+                // else {
+                //    ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text('Произошла ошибка. Попробуйте снова!'),
+                //       backgroundColor: Colors.redAccent,
+                //     ),
+                //   );
+                // }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 80, 139, 151),

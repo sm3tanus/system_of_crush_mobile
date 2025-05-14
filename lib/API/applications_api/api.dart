@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 Future fetchCurrentApplications() async {
   final token = await FlutterSecureStorage().read(key: 'token');
   final idBrigadir = await FlutterSecureStorage().read(key: 'idBrigadir');
-  final url = Uri.parse('$apiURL/api/applications/brigadir/$idBrigadir');
+  final url = Uri.parse('$apiURL/api/mobile/applications/brigadir/$idBrigadir');
   var response = await http.get(
     url,
     headers: {
@@ -26,11 +26,10 @@ Future fetchCurrentApplications() async {
     return response.statusCode;
   }
 }
-
 
 Future fetchApplications() async {
   final token = await FlutterSecureStorage().read(key: 'token');
-  final url = Uri.parse('$apiURL/api/applications');
+  final url = Uri.parse('$apiURL/api/mobile/applications');
   var response = await http.get(
     url,
     headers: {
@@ -46,14 +45,12 @@ Future fetchApplications() async {
     print('Error: ${response.statusCode}');
     print('ErrorMessage: ${response.body}');
     return response.statusCode;
-
   }
 }
 
-
 Future fetchApplication(String idApplication) async {
   final token = await FlutterSecureStorage().read(key: 'token');
-  final url = Uri.parse('$apiURL/api/applications/$idApplication');
+  final url = Uri.parse('$apiURL/api/mobile/applications/$idApplication');
   var response = await http.get(
     url,
     headers: {
@@ -65,6 +62,34 @@ Future fetchApplication(String idApplication) async {
   if (response.statusCode == 200) {
     var data = json.decode(response.body);
     return Application.fromJson(data);
+  } else {
+    print('Error: ${response.statusCode}');
+    print('ErrorMessage: ${response.body}');
+    return response.statusCode;
+  }
+}
+
+Future takeApplication(String idApplication) async {
+  final token = await FlutterSecureStorage().read(key: 'token');
+  final idBrigadir = await FlutterSecureStorage().read(key: 'idBrigadir');
+  final url = Uri.parse(
+      '$apiURL/api/mobile/applications/$idApplication/set-to-brigadir');
+  
+  final body = jsonEncode({
+    'id_brigadir': idBrigadir
+  });
+
+  var response = await http.patch(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+    body: body, 
+  );
+
+  if (response.statusCode == 200) {
+    return response.statusCode;
   } else {
     print('Error: ${response.statusCode}');
     print('ErrorMessage: ${response.body}');

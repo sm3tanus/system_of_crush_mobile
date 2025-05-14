@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:system_of_crush_mobile_app/API/models.dart';
+import 'package:system_of_crush_mobile_app/pages/info_about_application.dart';
+import 'package:system_of_crush_mobile_app/pages/info_about_this_application.dart';
 import 'package:system_of_crush_mobile_app/themes/light_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -113,219 +115,261 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white,
-                      Color(0xFFD9D9D9),
-                    ],
-                    stops: [
-                      0.2,
-                      0.2,
-                    ], // Четкое разделение
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomCenter,
-                  ),
-                ),
-                child: Column(children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: Color(0xFFD9D9D9),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFD9D9D9),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
-                    child: TextField(
-                      maxLength: 30,
-                      controller: _searchController,
-                      cursorColor: Color(0xff353535),
-                      style: TextStyle(
-                        color: Color(0xff353535),
-                        fontWeight: FontWeight.w600,
-                      ),
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                          hintText: 'Поиск',
-                          hintStyle: TextStyle(
-                              color: Color.fromARGB(255, 111, 111, 111)),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16.0),
-                          border: InputBorder.none,
-                          suffixIcon: Icon(
-                            Iconsax.search_normal_1,
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white,
+                        Color(0xFFD9D9D9),
+                      ],
+                      stops: [
+                        0.2,
+                        0.2,
+                      ], // Четкое разделение
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Color(0xFFD9D9D9),
                           ),
-                          suffixIconColor: Color.fromARGB(255, 111, 111, 111),
-                          counterText: ''),
+                          child: TextField(
+                            maxLength: 30,
+                            controller: _searchController,
+                            cursorColor: Color(0xff353535),
+                            style: TextStyle(
+                              color: Color(0xff353535),
+                              fontWeight: FontWeight.w600,
+                            ),
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                                hintText: 'Поиск',
+                                hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 111, 111, 111)),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 16.0),
+                                border: InputBorder.none,
+                                suffixIcon: Icon(
+                                  Iconsax.search_normal_1,
+                                ),
+                                suffixIconColor:
+                                    Color.fromARGB(255, 111, 111, 111),
+                                counterText: ''),
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        FloatingActionButton(
+                          onPressed: () {
+                            getApplications();
+                            setState(() {});
+                          },
+                          backgroundColor: Colors.white,
+                          splashColor: Colors.grey[400],
+                          elevation: 2,
+                          highlightElevation: 4,
+                          shape: CircleBorder(),
+                          mini: true,
+                          child: Icon(
+                            Iconsax.refresh,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.61,
-                    child: FutureBuilder<List<Application>>(
-                      future: applications,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(child: Text("Подождите..."));
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text("Ошибка: ${snapshot.error}"));
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return Center(child: Text("Нет данных"));
-                        } else {
-                          return ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              itemBuilder: (context, index) {
-                                var application = snapshot.data![index];
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.61,
+                      child: FutureBuilder<List<Application>>(
+                        future: applications,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: Text("Подождите..."));
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text("Ошибка: ${snapshot.error}"));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            return Center(child: Text("Нет данных"));
+                          } else {
+                            return ListView.builder(
+                                itemCount: snapshot.data!.length,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                itemBuilder: (context, index) {
+                                  var application = snapshot.data![index];
 
-                                Color importanceColor =
-                                    application.importance == "Высокая"
-                                        ? Colors.redAccent
-                                        : application.importance == "Средняя"
-                                            ? Colors.orangeAccent
-                                            : Colors.grey;
+                                  Color importanceColor =
+                                      application.importance == "Высокая"
+                                          ? Colors.redAccent
+                                          : application.importance == "Средняя"
+                                              ? Colors.orangeAccent
+                                              : Colors.grey;
 
-                                return Container(
-                                  padding: EdgeInsets.all(16),
-                                  margin: EdgeInsets.only(
-                                    bottom: 15,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(30),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 6,
-                                        offset: Offset(0, 4),
-                                      )
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            '№${application.id}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Unbounded',
-                                              fontSize: 20,
-                                            ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              InfoAboutThisApplicationPage(
+                                            selectedApplicationId:
+                                                application.id.toString(),
                                           ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(16),
+                                      margin: EdgeInsets.only(
+                                        bottom: 15,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(30),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 6,
+                                            offset: Offset(0, 4),
+                                          )
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                '№${application.id}',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Unbounded',
+                                                  fontSize: 20,
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.timer,
+                                                      size: 16,
+                                                      color: Colors.grey),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Таймер мин.',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Colors.redAccent,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
                                           Row(
                                             children: [
-                                              Icon(Icons.timer,
-                                                  size: 16, color: Colors.grey),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                'Таймер мин.',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.redAccent,
+                                              Icon(Iconsax.location,
+                                                  size: 18, color: Colors.grey),
+                                              SizedBox(width: 6),
+                                              Expanded(
+                                                child: Text(
+                                                  application.address,
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Icon(Iconsax.location,
-                                              size: 18, color: Colors.grey),
-                                          SizedBox(width: 6),
-                                          Expanded(
+                                          SizedBox(height: 6),
+                                          Row(
+                                            children: [
+                                              Icon(Iconsax.warning_2,
+                                                  size: 18, color: Colors.grey),
+                                              SizedBox(width: 6),
+                                              Text(
+                                                application.accident,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black87),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 6),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.flag,
+                                                  size: 18,
+                                                  color: importanceColor),
+                                              SizedBox(width: 6),
+                                              Text(
+                                                '${application.importance} важность',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: importanceColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 59, 187, 125),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
                                             child: Text(
-                                              application.address,
-                                              style: TextStyle(fontSize: 16),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                              "В процессе",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: const Color.fromARGB(
+                                                    255, 255, 255, 255),
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(Iconsax.warning_2,
-                                              size: 18, color: Colors.grey),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            application.accident,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black87),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.flag,
-                                              size: 18, color: importanceColor),
-                                          SizedBox(width: 6),
-                                          Text(
-                                            '${application.importance} важность',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color: importanceColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 8),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 4, horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              255, 59, 187, 125),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: Text(
-                                          "В процессе",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              });
-                        }
-                      },
+                                    ),
+                                  );
+                                });
+                          }
+                        },
+                      ),
                     ),
-                  ),
-                ]),
-              )
+                  ])),
             ],
           ),
         ),

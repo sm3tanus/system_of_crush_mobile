@@ -127,8 +127,8 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                       Color(0xFFD9D9D9),
                     ],
                     stops: [
-                      0.2,
-                      0.2,
+                      0.25,
+                      0.25,
                     ], // Четкое разделение
                     begin: Alignment.topLeft,
                     end: Alignment.bottomCenter,
@@ -139,35 +139,59 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Color(0xFFD9D9D9),
-                      ),
-                      child: TextField(
-                        maxLength: 30,
-                        controller: _searchController,
-                        cursorColor: Color(0xff353535),
-                        style: TextStyle(
-                          color: Color(0xff353535),
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlignVertical: TextAlignVertical.center,
-                        decoration: InputDecoration(
-                            hintText: 'Поиск',
-                            hintStyle: TextStyle(
-                                color: Color.fromARGB(255, 111, 111, 111)),
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 16.0),
-                            border: InputBorder.none,
-                            suffixIcon: Icon(
-                              Iconsax.search_normal_1,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.75,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Color(0xFFD9D9D9),
+                          ),
+                          child: TextField(
+                            maxLength: 30,
+                            controller: _searchController,
+                            cursorColor: Color(0xff353535),
+                            style: TextStyle(
+                              color: Color(0xff353535),
+                              fontWeight: FontWeight.w600,
                             ),
-                            suffixIconColor: Color.fromARGB(255, 111, 111, 111),
-                            counterText: ''),
-                      ),
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                                hintText: 'Поиск',
+                                hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 111, 111, 111)),
+                                contentPadding:
+                                    EdgeInsets.symmetric(horizontal: 16.0),
+                                border: InputBorder.none,
+                                suffixIcon: Icon(
+                                  Iconsax.search_normal_1,
+                                ),
+                                suffixIconColor:
+                                    Color.fromARGB(255, 111, 111, 111),
+                                counterText: ''),
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        FloatingActionButton(
+                          onPressed: () {
+                            getApplications();
+                            setState(() {});
+                          },
+                          backgroundColor: Colors.white,
+                          splashColor: Colors.grey[400],
+                          elevation: 2,
+                          highlightElevation: 4,
+                          shape: CircleBorder(),
+                          mini: true,
+                          child: Icon(
+                            Iconsax.refresh,
+                            color: Colors.black,
+                            size: 24,
+                          ),
+                        )
+                      ],
                     ),
                     SizedBox(
                       height: 20,
@@ -193,8 +217,7 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                                 horizontal: 16,
                               ),
                               itemBuilder: (context, index) {
-                                var currentApplication = snapshot.data![
-                                    index]; 
+                                var currentApplication = snapshot.data![index];
 
                                 Color importanceColor = currentApplication
                                             .importance ==

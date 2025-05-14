@@ -1,5 +1,4 @@
 import 'package:system_of_crush_mobile_app/pages/auth.dart';
-import 'package:system_of_crush_mobile_app/pages/info_about_application.dart';
 import 'package:system_of_crush_mobile_app/pages/landing.dart';
 import 'package:system_of_crush_mobile_app/pages/main_menu.dart';
 import 'package:system_of_crush_mobile_app/pages/map.dart';
