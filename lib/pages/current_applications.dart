@@ -22,7 +22,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
   var userRole;
   final TextEditingController _searchController = TextEditingController();
 
-  late Future<List<Application>> applications;
+  late Future<List<CurrentApplication>> applications;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
   Future<void> getApplications() async {
     var result = await fetchCurrentApplications();
 
-    if (result is List<Application>) {
+    if (result is List<CurrentApplication>) {
       setState(() {
         applications = Future.value(result);
       });
@@ -104,7 +104,10 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                       ],
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                         Navigator.popAndPushNamed(context, '/auth');
+
+                      },
                       icon: Icon(
                         Iconsax.profile_circle,
                         size: 30,
@@ -199,7 +202,7 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.61,
-                      child: FutureBuilder<List<Application>>(
+                      child: FutureBuilder<List<CurrentApplication>>(
                         future: applications,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -225,6 +228,12 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                                           ? Colors.redAccent
                                           : application.importance == "Средняя"
                                               ? Colors.orangeAccent
+                                              : Colors.grey;
+
+                                              Color statusColor =
+                                      application.status == "В работе"
+                                          ? Color.fromARGB(
+                                                  255, 59, 187, 125)
                                               : Colors.grey;
 
                                   return GestureDetector(
@@ -275,18 +284,9 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                                               Row(
                                                 children: [
                                                   Icon(Icons.timer,
-                                                      size: 16,
-                                                      color: Colors.grey),
+                                                      size: 25,
+                                                      color: statusColor),
                                                   SizedBox(width: 5),
-                                                  Text(
-                                                    'Таймер мин.',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.redAccent,
-                                                    ),
-                                                  ),
                                                 ],
                                               ),
                                             ],
@@ -345,13 +345,12 @@ class _CurrentApplicationsPageState extends State<CurrentApplicationsPage> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 10),
                                             decoration: BoxDecoration(
-                                              color: const Color.fromARGB(
-                                                  255, 59, 187, 125),
+                                              color: statusColor,
                                               borderRadius:
                                                   BorderRadius.circular(5),
                                             ),
                                             child: Text(
-                                              "В процессе",
+                                              application.status,
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 color: const Color.fromARGB(

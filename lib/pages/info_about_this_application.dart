@@ -22,10 +22,17 @@ class InfoAboutThisApplicationPage extends StatefulWidget {
 
 class _InfoAboutThisApplicationPageState
     extends State<InfoAboutThisApplicationPage> {
-  Future<Application?> getApplication() async {
+  var _isStartBtnVisible;
+
+  Future<CurrentApplication?> getApplication() async {
     var result = await fetchApplication(widget.selectedApplicationId);
-    print(result.toString());
-    if (result != null && result is Application) {
+
+    if (result != null && result is CurrentApplication) {
+      if (result.startDate == "Нет данных")
+        _isStartBtnVisible = true;
+      else
+        _isStartBtnVisible = false;
+      print(result.startDate);
       return result;
     } else if (result == 401) {
       Future.microtask(() => Navigator.popAndPushNamed(context, '/auth'));
@@ -35,9 +42,9 @@ class _InfoAboutThisApplicationPageState
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Application?>(
+    return FutureBuilder<CurrentApplication?>(
       future: getApplication(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -85,35 +92,75 @@ class _InfoAboutThisApplicationPageState
   }
 
   Widget _buildTakeToWorkButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ElevatedButton(
-        onPressed: () {
-          _showConfirmationDialog();
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 80, 139, 151),
-          foregroundColor: Colors.white,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: EdgeInsets.symmetric(vertical: 16),
-          minimumSize: Size(double.infinity, 50),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Начать работу',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Visibility(
+            visible: _isStartBtnVisible,
+            child: ElevatedButton(
+              onPressed: () {
+                _showConfirmationDialog();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 80, 139, 151),
+                foregroundColor: Colors.white,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Начать работу',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Visibility(
+            visible: !_isStartBtnVisible,
+            child: ElevatedButton(
+              onPressed: () {
+                _showConfirmationDialogForFinish();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 80, 139, 151),
+                foregroundColor: Colors.white,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Закончить работу',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -138,24 +185,83 @@ class _InfoAboutThisApplicationPageState
             ),
             ElevatedButton(
               onPressed: () async {
-                // var status =  await takeApplication(widget.selectedApplicationId); 
-                // if (status == 200) {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(
-                //       content: Text('Заявка успешно взята в работу!'),
-                //       backgroundColor: const Color.fromARGB(255, 100, 180, 103),
-                //     ),
-                //   );
-                //   Navigator.popAndPushNamed(context, '/menu');
-                // }
-                // else {
-                //    ScaffoldMessenger.of(context).showSnackBar(
-                //     SnackBar(
-                //       content: Text('Произошла ошибка. Попробуйте снова!'),
-                //       backgroundColor: Colors.redAccent,
-                //     ),
-                //   );
-                // }
+                var status =
+                    await startApplication(widget.selectedApplicationId);
+                if (status >= 200 && status <= 299) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Заявка успешно взята в работу!'),
+                      backgroundColor: const Color.fromARGB(255, 100, 180, 103),
+                    ),
+                  );
+                  Navigator.popAndPushNamed(context, '/menu');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Произошла ошибка. Попробуйте снова!'),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 80, 139, 151),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.all(10),
+              ),
+              child: Text(
+                'Подтвердить',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showConfirmationDialogForFinish() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text('Подтверждение'),
+          content:
+              Text('Вы уверены, что хотите закончить работу с этой заявкой?'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Отмена',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                var status =
+                    await finishApplication(widget.selectedApplicationId);
+                if (status >= 200 && status <= 299) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Заявка успешно закончена!'),
+                      backgroundColor: const Color.fromARGB(255, 100, 180, 103),
+                    ),
+                  );
+                  Navigator.popAndPushNamed(context, '/menu');
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Произошла ошибка. Попробуйте снова!'),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 80, 139, 151),
@@ -215,7 +321,7 @@ class _InfoAboutThisApplicationPageState
     );
   }
 
-  Widget _buildInfoCard(Application application, Color importanceColor) {
+  Widget _buildInfoCard(CurrentApplication application, Color importanceColor) {
     return Card(
       elevation: 4,
       color: Color.fromARGB(255, 255, 255, 255),
@@ -228,6 +334,7 @@ class _InfoAboutThisApplicationPageState
             _buildInfoRow(
                 Iconsax.document, 'Номер заявки', application.id.toString()),
             _buildInfoRow(Iconsax.location, 'Адрес', application.address),
+            _buildInfoRow(Iconsax.calendar_1, 'Дата', application.startDate),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
               child: Row(
@@ -318,7 +425,7 @@ class _InfoAboutThisApplicationPageState
     );
   }
 
-  Widget _buildMoreInfo(Application application) {
+  Widget _buildMoreInfo(CurrentApplication application) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

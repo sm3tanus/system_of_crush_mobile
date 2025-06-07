@@ -17,15 +17,16 @@ Future fetchCurrentApplications() async {
     },
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
     List<dynamic> data = json.decode(response.body) ?? [];
-    return data.map((json) => Application.fromJson(json)).toList();
+    return data.map((json) => CurrentApplication.fromJson(json)).toList();
   } else {
     print('Error: ${response.statusCode}');
     print('ErrorMessage: ${response.body}');
     return response.statusCode;
   }
 }
+
 
 Future fetchApplications() async {
   final token = await FlutterSecureStorage().read(key: 'token');
@@ -38,7 +39,7 @@ Future fetchApplications() async {
     },
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
     List<dynamic> data = json.decode(response.body) ?? [];
     return data.map((json) => Application.fromJson(json)).toList();
   } else {
@@ -59,15 +60,16 @@ Future fetchApplication(String idApplication) async {
     },
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
     var data = json.decode(response.body);
-    return Application.fromJson(data);
+    return CurrentApplication.fromJson(data);
   } else {
     print('Error: ${response.statusCode}');
     print('ErrorMessage: ${response.body}');
     return response.statusCode;
   }
 }
+
 
 Future takeApplication(String idApplication) async {
   final token = await FlutterSecureStorage().read(key: 'token');
@@ -88,7 +90,7 @@ Future takeApplication(String idApplication) async {
     body: body, 
   );
 
-  if (response.statusCode == 200) {
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
     return response.statusCode;
   } else {
     print('Error: ${response.statusCode}');
@@ -96,3 +98,49 @@ Future takeApplication(String idApplication) async {
     return response.statusCode;
   }
 }
+
+
+Future startApplication(String idApplication) async {
+  final token = await FlutterSecureStorage().read(key: 'token');
+  final url = Uri.parse(
+      '$apiURL/api/mobile/applications/$idApplication/start-applications');
+      
+  var response = await http.patch(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
+    return response.statusCode;
+  } else {
+    print('Error: ${response.statusCode}');
+    print('ErrorMessage: ${response.body}');
+    return response.statusCode;
+  }
+}
+
+Future finishApplication(String idApplication) async {
+  final token = await FlutterSecureStorage().read(key: 'token');
+  final url = Uri.parse(
+      '$apiURL/api/mobile/applications/$idApplication/finish-applications');
+      
+  var response = await http.patch(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode >= 200 && response.statusCode <= 299) {
+    return response.statusCode;
+  } else {
+    print('Error: ${response.statusCode}');
+    print('ErrorMessage: ${response.body}');
+    return response.statusCode;
+  }
+}
+

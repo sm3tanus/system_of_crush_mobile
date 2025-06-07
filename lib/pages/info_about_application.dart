@@ -18,10 +18,10 @@ class InfoAboutApplicationPage extends StatefulWidget {
 }
 
 class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
-  Future<Application?> getApplication() async {
+  Future<CurrentApplication?> getApplication() async {
     var result = await fetchApplication(widget.selectedApplicationId);
     print(result.toString());
-    if (result != null && result is Application) {
+    if (result != null && result is CurrentApplication) {
       return result;
     } else if (result == 401) {
       Future.microtask(() => Navigator.popAndPushNamed(context, '/auth'));
@@ -33,7 +33,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Application?>(
+    return FutureBuilder<CurrentApplication?>(
       future: getApplication(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -134,8 +134,9 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                var status =  await takeApplication(widget.selectedApplicationId);
-                if (status == 200) {
+                var status =
+                    await takeApplication(widget.selectedApplicationId);
+                if (status >= 200 && status <= 299) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Заявка успешно взята в работу!'),
@@ -143,9 +144,8 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
                     ),
                   );
                   Navigator.popAndPushNamed(context, '/menu');
-                }
-                else {
-                   ScaffoldMessenger.of(context).showSnackBar(
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Произошла ошибка. Попробуйте снова!'),
                       backgroundColor: Colors.redAccent,
@@ -211,7 +211,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
     );
   }
 
-  Widget _buildInfoCard(Application application, Color importanceColor) {
+  Widget _buildInfoCard(CurrentApplication application, Color importanceColor) {
     return Card(
       elevation: 4,
       color: Color.fromARGB(255, 255, 255, 255),
@@ -314,7 +314,7 @@ class _InfoAboutApplicationPageState extends State<InfoAboutApplicationPage> {
     );
   }
 
-  Widget _buildMoreInfo(Application application) {
+  Widget _buildMoreInfo(CurrentApplication application) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [

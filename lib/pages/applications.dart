@@ -102,7 +102,9 @@ class _ApplicationsPageState extends State<ApplicationsPage> {
                       ],
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.popAndPushNamed(context, '/auth');
+                      },
                       icon: Icon(
                         Iconsax.profile_circle,
                         size: 30,
